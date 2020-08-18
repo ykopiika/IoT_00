@@ -29,44 +29,17 @@ void print_bits(uint8_t n)
     write(1, &c, 1);
 }
 
-//void test_func(void)
-//{
-//    uint32_t bit = 0;
-//
-//    for (int i = 0; i < 4; ++i) {
-//        bit <<= 1;
-//        bit += 1;
-//    }
-//    for (int i = 0; i < 4; ++i) {
-//        bit = bit << 1;
-//        bit += 0;
-//    }
-//    for (int i = 0; i < 4; ++i) {
-//        bit = bit << 1;
-//        bit += 0;
-//    }
-//    printf("hello world\n");
-//    printf("%d\n", bit);
-//    print_bits(bit);
-//    printf("\n");
-//    char c = (((bit >> (8-1)) & 1)+48);
-//    write(1, &c, 1);
-//    write(1, "\n", 1);
-//}
-
 void app_main()
 {
     int result = 0;
     uint8_t arr[5];
     bzero(&arr, sizeof(arr));
-    
-//    test_func();
+
     gpio_set_direction(DH11_POWER_PIN, GPIO_MODE_OUTPUT);
     gpio_set_direction(DH11_DATA_PIN, GPIO_MODE_OUTPUT);
     gpio_set_level(DH11_POWER_PIN, 1);
     gpio_set_level(DH11_DATA_PIN, 1);
-    sleep(3);
-//    ets_delay_us(30000);
+    ets_delay_us(3000000);
     gpio_set_level(DH11_DATA_PIN, 0);
     ets_delay_us(18000);
     gpio_set_level(DH11_DATA_PIN, 1);
@@ -91,6 +64,7 @@ void app_main()
         }
         else
             arr[j] <<= 1;
+        arr[j]+=0;
         if (i % 8 == 0)
             j++;
     }
