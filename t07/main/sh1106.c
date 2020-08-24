@@ -13,6 +13,11 @@ void sh1106_init(sh1106_t *display) {
     i2c_master_write_byte(cmd, 0xFF, true);
     i2c_master_write_byte(cmd, 0x8D, true); // charge pump
     i2c_master_write_byte(cmd, 0x14, true);
+
+    i2c_master_write_byte(cmd, 0x20, true);
+    i2c_master_write_byte(cmd, 0x00, true);
+
+
     i2c_master_write_byte(cmd, 0x10, true); // high column
     i2c_master_write_byte(cmd, 0xB0, true);
     i2c_master_write_byte(cmd, 0xC8, true);
@@ -22,7 +27,7 @@ void sh1106_init(sh1106_t *display) {
     i2c_master_write_byte(cmd, 0xA1, true); // segment remap
     i2c_master_write_byte(cmd, 0xA6, true);
     i2c_master_write_byte(cmd, 0x81, true); // contrast
-    i2c_master_write_byte(cmd, 0xFF, true);
+    i2c_master_write_byte(cmd, 55, true);
     i2c_master_write_byte(cmd, 0xAF, true); // on
     i2c_master_stop(cmd);
     i2c_master_cmd_begin(display->port, cmd, 10 / portTICK_PERIOD_MS);
