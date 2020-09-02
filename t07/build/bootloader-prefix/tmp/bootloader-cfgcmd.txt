@@ -1,1 +1,0 @@
-cmd='/usr/bin/cmake;-DSDKCONFIG=/home/ykopiika/Desktop/IoT/t07/sdkconfig;-DIDF_PATH=/home/ykopiika/esp/esp-idf;-DIDF_TARGET=esp32;-DPYTHON_DEPS_CHECKED=1;-DPYTHON=/home/ykopiika/.espressif/python_env/idf4.3_py2.7_env/bin/python;-DEXTRA_COMPONENT_DIRS=/home/ykopiika/esp/esp-idf/components/bootloader;-DLEGACY_INCLUDE_COMMON_HEADERS=;-GNinja;<SOURCE_DIR><SOURCE_SUBDIR>'

@@ -1,2 +1,2 @@
-idf_component_register(SRCS "main.c" SRCS "sh1106.c"
+idf_component_register(SRCS "main.c" "sh1106.c"
                     INCLUDE_DIRS "")

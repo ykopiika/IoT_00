@@ -1,5 +1,4 @@
 idf_component_register(
-        SRCS "main.c"
+        SRCS "flashing_leds.c"
         INCLUDE_DIRS "."
-        REQUIRES srcs
 )
