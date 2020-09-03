@@ -1,2 +1,5 @@
-idf_component_register(SRCS "main.c" "sh1106.c"
-                    INCLUDE_DIRS "")
+idf_component_register(
+        SRCS "main.c"
+        INCLUDE_DIRS "."
+        REQUIRES oled
+)
