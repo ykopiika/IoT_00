@@ -35,7 +35,8 @@ static void set_commands(t_oled *oled)
     i2c_cmd_link_delete(cmd);
 }
 
-void display_pixels(t_oled *oled) {
+void display_pixels(t_oled *oled)
+{
     if (!oled)
         ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
