@@ -1,14 +1,10 @@
 #include "oled.h"
 #include "font6x8.h"
 
-//static void print_error(char *str)
-//{
-//    printf("Error: %s\n", str);
-//    exit(1);
-//}
-
 static void set_commands(t_oled *oled)
 {
+    if (!oled)
+        ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     ESP_ERROR_CHECK(i2c_master_start(cmd));
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd,
@@ -39,124 +35,60 @@ static void set_commands(t_oled *oled)
     i2c_cmd_link_delete(cmd);
 }
 
-//void sh1106_write_page(sh1106_t *display, uint8_t page) {
-//    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-//    i2c_master_start(cmd);
-//    i2c_master_write_byte(cmd, (display->addr << 1) | I2C_MASTER_WRITE, true);
-//    i2c_master_write_byte(cmd, 0x80, true); // single command
-//    i2c_master_write_byte(cmd, 0xB0 + page, true);
-//    i2c_master_write_byte(cmd, 0x40, true); // data stream
-//    i2c_master_write(cmd, display->pages[page], 128, true);
-//    i2c_master_stop(cmd);
-//    i2c_master_cmd_begin(display->port, cmd, 10 / portTICK_PERIOD_MS);
-//    i2c_cmd_link_delete(cmd);
-//}
-//
-//void sh1106_update(sh1106_t *display) {
-//    for (uint8_t i = 0; i < 16; i++) {
-//        if (display->changes & (1 << i)) {
-//            sh1106_write_page(display, i);
-//        }
-//    }
-//    display->changes = 0x0000;
-//}
-
-//void sh1106_clear(sh1106_t *display) {
-//    for (uint8_t i = 0; i < 16; i++) {
-//        for (uint8_t j = 0; j < 128; j++) {
-//            display->pages[i][j] = 0x00;
-//        }
-//    }
-//    display->changes = 0xffff;
-//}
-
-//void sh1106_fill(sh1106_t *display) {
-//    for (uint8_t i = 0; i < 16; i++) {
-//        for (uint8_t j = 0; j < 128; j++) {
-//            display->pages[i][j] = 0xff;
-//        }
-//    }
-//    display->changes = 0xffff;
-//}
-//
-//void sh1106_set(sh1106_t *display, uint8_t x, uint8_t y, bool s) {
-//    const uint8_t i = y / 8;
-//    if (s) {
-//        display->pages[i][x] |= (1 << (y % 8));
-//    } else {
-//        display->pages[i][x] &= ~(1 << (y % 8));
-//    }
-//    display->changes |= (1 << i);
-//}
-
-//void sh1106_set(sh1106_t *display, uint8_t x, uint8_t y, bool s) {
-//    const uint8_t i = y / 8;
-//    if (s) {
-//        display->pages[i][x] |= (1 << (y % 8));
-//    } else {
-//        display->pages[i][x] &= ~(1 << (y % 8));
-//    }
-//    display->changes |= (1 << i);
-//}
-
-//bool sh1106_get(sh1106_t *display, uint8_t x, uint8_t y) {
-//    return display->pages[y / 8][x] & (1 << (y % 8));
-//}
-
-void write_lcd(uint8_t *data) {
+void display_pixels(t_oled *oled) {
+    if (!oled)
+        ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     ESP_ERROR_CHECK(i2c_master_start(cmd));
-    ESP_ERROR_CHECK(i2c_master_write_byte(cmd, (OLED_ADDR << 1) | I2C_MASTER_WRITE, true));
+    ESP_ERROR_CHECK(i2c_master_write_byte(cmd, (oled->addr << 1) | I2C_MASTER_WRITE, true));
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x80, true)); // single command
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x00, true)); // page number
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x40, true)); // data stream
-    ESP_ERROR_CHECK(i2c_master_write(cmd, data, (LCDWIDTH * LCDHEIGHT), true));
+    ESP_ERROR_CHECK(i2c_master_write(cmd, oled->pixels, sizeof(oled->pixels), true));
     ESP_ERROR_CHECK(i2c_master_stop(cmd));
-    ESP_ERROR_CHECK(i2c_master_cmd_begin(I2C_PORT, cmd, 10 / portTICK_PERIOD_MS));
+    ESP_ERROR_CHECK(i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS));
     i2c_cmd_link_delete(cmd);
 }
 
-//void draw_pixel(int16_t x, uint16_t y, _Bool color)
-//{
-//    if (color == true)
-//        buffer[x + ((y >> 3U)*LCDWIDTH)] |=  (1 << (y&7));
-//    else
-//        buffer[x + ((y >> 3U)*LCDWIDTH)] &= ~(1 << (y&7));
-//}
-
-/*
-    Initialize I2C driver.
-*/
-
-
-void str_to_oled(uint8_t *data, char *str)
+void put_pixel(uint8_t *pixels, int16_t x, uint16_t y, _Bool color)
 {
+    if (!pixels)
+        ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
+    if (color == true)
+        pixels[x + ((y >> 3U) * LCDWIDTH)] |=  (1U << (y & 7U));
+    else
+        pixels[x + ((y >> 3U) * LCDWIDTH)] &= ~(1U << (y & 7U));
+}
+
+static void char_to_pixels(uint8_t *pixels, int *pixels_index, int char_index)
+{
+    pixels[(*pixels_index)++] = font6x8[char_index++];
+    pixels[(*pixels_index)++] = font6x8[char_index++];
+    pixels[(*pixels_index)++] = font6x8[char_index++];
+    pixels[(*pixels_index)++] = font6x8[char_index++];
+    pixels[(*pixels_index)++] = font6x8[char_index++];
+    pixels[(*pixels_index)] = font6x8[char_index];
+}
+
+void str_to_oled(t_oled *oled, char *str)
+{
+    if (!oled || !str)
+        ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
     int len = strlen(str);
-    if (len <= 168)
-    {
-        int x = 0;
-        int y = 0;
-        for (int i = 0; i < len; ++i) {
-            int num_buf = (y * LCDWIDTH) + x;
-            int font_buf = (str[i] - 32) * 6;
-            data[num_buf++] = font6x8[font_buf++];
-            data[num_buf++] = font6x8[font_buf++];
-            data[num_buf++] = font6x8[font_buf++];
-            data[num_buf++] = font6x8[font_buf++];
-            data[num_buf++] = font6x8[font_buf++];
-            data[num_buf] = font6x8[font_buf];
-            x += 6;
-            if (x >= 126)
-            {
-                x = 0;
-                y++;
-            }
-            write_lcd(data);
-            ets_delay_us(70000);
+    int x = 0;
+    int y = 0;
+    for (int i = 0; (i < len) && (i < 168); ++i) {
+        int pixels_index = (y * LCDWIDTH) + x;
+        int char_index = (str[i] - 32) * 6;
+        char_to_pixels(oled->pixels, &pixels_index, char_index);
+        x += 6;
+        if (x >= 126)
+        {
+            x = 0;
+            y++;
         }
-    }
-    else {
-        str_to_oled(data, "NON");
+        display_pixels(oled);
+        ets_delay_us(50000);
     }
 }
 
@@ -174,25 +106,23 @@ static void init_i2c(void)
     ESP_ERROR_CHECK(i2c_driver_install(I2C_PORT, I2C_MODE_MASTER, 0, 0, 0));
 }
 
-void oled_clear(uint8_t addr, i2c_port_t port, uint8_t *buffer)
+void clear_oled(t_oled *oled)
 {
-    memset(&buffer, 0, sizeof(buffer));
-    write_lcd(buffer);
-
+    if (!oled)
+        ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
+    memset(oled->pixels, 0, sizeof(oled->pixels));
+    display_pixels(oled);
 }
 
 void init_oled(t_oled *oled)
 {
     if (!oled)
         ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
-    *oled = (t_oled){.addr = OLED_ADDR, .port = I2C_PORT, .oled_buf = {0}};
+    *oled = (t_oled){.addr = OLED_ADDR, .port = I2C_PORT, .pixels = {0}};
     ESP_ERROR_CHECK(gpio_set_direction(OLED_EN, GPIO_MODE_OUTPUT));
     ESP_ERROR_CHECK(gpio_set_level(OLED_EN, 1));
     ets_delay_us(1000000);
     init_i2c();
     set_commands(oled);
-
-//    oled_clear(OLED_ADDR, I2C_PORT, buffer);
-//    sh1106_clear(&oled);
-//    sh1106_update(&oled);
+    clear_oled(oled);
 }
