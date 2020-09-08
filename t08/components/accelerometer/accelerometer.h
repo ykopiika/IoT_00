@@ -24,11 +24,14 @@
 
 #define MAGIC_CONST 0.03
 
-//void make_bip(_Bool status);
-//_Bool check_flip(double x, double y, double z);
+typedef struct  s_dbl_xyz
+{
+    double x;
+    double y;
+    double z;
+}               t_dbl_xyz;
 
 void accel_init (spi_device_handle_t *spi);
-//void adxl345_start (spi_device_handle_t spi);
 void adxl345_read_acceleration (spi_device_handle_t spi, int16_t* accs);
 
 #endif
