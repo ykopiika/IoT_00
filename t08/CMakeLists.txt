@@ -6,4 +6,3 @@ set(CMAKE_C_COMPILER ~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa
 set(CMAKE_CXX_COMPILER ~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++)
 set(CMAKE_ASM_COMPILER ~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc)
 project(Accelerometer)
-#idf_build_component(main)
