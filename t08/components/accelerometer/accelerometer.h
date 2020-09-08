@@ -1,5 +1,5 @@
-#ifndef ACCELEROMETER_ACCELEROMETER_H
-#define ACCELEROMETER_ACCELEROMETER_H
+#ifndef ACCELEROMETER_H
+#define ACCELEROMETER_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,6 +32,6 @@ typedef struct  s_dbl_xyz
 }               t_dbl_xyz;
 
 void accel_init (spi_device_handle_t *spi);
-void adxl345_read_acceleration (spi_device_handle_t spi, int16_t* accs);
+void read_acceleration (spi_device_handle_t spi, int16_t* xyz);
 
 #endif

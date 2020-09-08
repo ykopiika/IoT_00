@@ -47,18 +47,19 @@ static void leds_amplif_init(void)
     ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_33, GPIO_MODE_OUTPUT));
 }
 
-void app_main (void) {
+void app_main (void)
+{
     spi_device_handle_t spi;
     _Bool is_board_flipped = false;
-    int16_t accs[3];
+    int16_t xyz[3];
     t_dbl_xyz filtered = {0.0, 0.0, 0.0};
     leds_amplif_init();
     accel_init(&spi);
     while (true) {
-        adxl345_read_acceleration(spi, accs);
-        filtered.x = 0.94 * filtered.x + 0.06 * ((double)accs[0]/256.0);
-        filtered.y = 0.94 * filtered.y + 0.06 * ((double)accs[1]/256.0);
-        filtered.z = 0.94 * filtered.z + 0.06 * ((double)accs[2]/256.0);
+        read_acceleration(spi, xyz);
+        filtered.x = 0.94 * filtered.x + 0.06 * ((double)xyz[0] / 256.0);
+        filtered.y = 0.94 * filtered.y + 0.06 * ((double)xyz[1] / 256.0);
+        filtered.z = 0.94 * filtered.z + 0.06 * ((double)xyz[2] / 256.0);
         is_board_flipped = check_flip(filtered);
         leds_set_level(is_board_flipped);
         make_bip(is_board_flipped);
