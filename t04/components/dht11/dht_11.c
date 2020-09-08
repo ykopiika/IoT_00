@@ -39,7 +39,7 @@ static void call_to_dht11()
         print_error("STAGE_2 - Sensor response failed");
 }
 
-void set_bit(int result, uint8_t *arr, int *j, int i)
+static void set_bit(int result, uint8_t *arr, int *j, int i)
 {
     if (result > 28)
     {
