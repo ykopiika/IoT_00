@@ -49,7 +49,9 @@ void display_pixels(t_oled *oled)
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x40, true)); // data stream
     ESP_ERROR_CHECK(i2c_master_write(cmd, oled->pixels, sizeof(oled->pixels), true));
     ESP_ERROR_CHECK(i2c_master_stop(cmd));
-    ESP_ERROR_CHECK(i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS));
+    if (i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS) != ESP_OK)
+        printf("\x1b[35m\t\t\t=== i2c_begin not ESP_OK ===\n\x1B[0m");
+//    i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS);TODO: change ESP_ERROR
     i2c_cmd_link_delete(cmd);
 }
 
@@ -107,12 +109,11 @@ static void init_i2c(void)
     ESP_ERROR_CHECK(i2c_driver_install(I2C_PORT, I2C_MODE_MASTER, 0, 0, 0));
 }
 
-void clear_oled(t_oled *oled)
+void clear_oled(t_oled *oled) //TODO: rename function
 {
     if (!oled)
         ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
     memset(oled->pixels, 0, sizeof(oled->pixels));
-    display_pixels(oled);
 }
 
 void init_oled(t_oled *oled)

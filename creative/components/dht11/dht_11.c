@@ -107,3 +107,7 @@ void get_value_dht11(uint8_t *temperature, uint8_t *humidity)
     *humidity = arr[0];
     *temperature = arr[2];
 }
+
+//TODO: 6 function
+//TODO: color printf_error
+//TODO coments
