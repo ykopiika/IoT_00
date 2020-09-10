@@ -1,5 +1,6 @@
 idf_component_register(
         SRCS "main.c"
+        SRCS "tasks.c"
         INCLUDE_DIRS "."
         REQUIRES accelerometer
         REQUIRES buttons

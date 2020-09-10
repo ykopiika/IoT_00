@@ -6,8 +6,8 @@
 #include "driver/dac.h"
 
 #define AMP_POWER_PIN 5
-#define DELAY 40
-#define STEP 30
+#define SPKR_DELAY 20
+#define SPKR_STEP 5
 
 void init_speaker(void);
 void make_bip(void);

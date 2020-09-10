@@ -6,19 +6,18 @@
 #include "driver/gpio.h"
 #include <driver/dac.h>
 
-#define LED_1 GPIO_NUM_27
-#define LED_2 GPIO_NUM_26
-#define BUTTON_1 GPIO_NUM_39
-#define BUTTON_2 GPIO_NUM_18
+//#define LED_1       GPIO_NUM_27
+//#define LED_2       GPIO_NUM_26
+#define BUTTON_1    GPIO_NUM_39
+#define BUTTON_2    GPIO_NUM_18
 
 typedef struct  s_button {
-    _Bool   flag;
-    _Bool   is_press;
-    _Bool   is_on;
-    int     led;
+    _Bool       flag;
+    _Bool       is_press;
+    _Bool       is_on;
 }               t_button;
 
 void buttons_init(void);
-void toggle_led(t_button *btn);
+void toggle_button(t_button *btn);
 
 #endif

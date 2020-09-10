@@ -10,6 +10,7 @@
 #define DH11_DATA_PIN 4
 #define DH11_POWER_PIN 2
 
+void dht11_init(void);
 void get_value_dht11(uint8_t *temperature, uint8_t *humidity);
 
 #endif

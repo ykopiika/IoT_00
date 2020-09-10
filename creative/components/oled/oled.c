@@ -17,8 +17,10 @@ static void set_commands(t_oled *oled)
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0xFF, true)); /// 0b11111111
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x8D, true)); /// 0b10001101 // charge pump
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x14, true)); /// 0b00010100
+
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x20, true)); /// 0b00100000 // set my mod
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x00, true)); /// 0b00000000
+
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x10, true)); /// 0b00010000 // high column
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0xB0, true)); /// 0b10110000
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0xC8, true)); /// 0b11001000
@@ -88,8 +90,6 @@ void str_to_oled(t_oled *oled, char *str)
             x = 0;
             y++;
         }
-        display_pixels(oled);
-        ets_delay_us(50000);
     }
 }
 

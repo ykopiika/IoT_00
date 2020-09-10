@@ -26,9 +26,9 @@
 
 typedef struct  s_dbl_xyz
 {
-    double x;
-    double y;
-    double z;
+    double      x;
+    double      y;
+    double      z;
 }               t_dbl_xyz;
 
 void accel_init (spi_device_handle_t *spi);
