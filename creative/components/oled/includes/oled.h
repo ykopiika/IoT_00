@@ -6,6 +6,7 @@
 #include "esp_log.h"
 #include "driver/gpio.h"
 #include "driver/i2c.h"
+#include "error_functions.h"
 
 #define OLED_ADDR   0x3C
 #define I2C_PORT    I2C_NUM_0

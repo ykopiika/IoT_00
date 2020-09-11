@@ -6,6 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
+#include "error_functions.h"
 
 #define DH11_DATA_PIN 4
 #define DH11_POWER_PIN 2

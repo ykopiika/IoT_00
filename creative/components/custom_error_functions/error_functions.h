@@ -1,5 +1,7 @@
-#ifndef COLOR_H
-# define COLOR_H
+#ifndef CUSTOM_ERROR_FUNCTIONS_H
+# define CUSTOM_ERROR_FUNCTIONS_H
+
+#include "esp_err.h"
 
 #define T_BLK "\x1b[30m" // 30 - text is 	black
 #define T_RED "\x1b[31m" // 31 - text is 	red
@@ -23,5 +25,9 @@
 #define T_SLV "\x1b[2m"  //  2  text is 	silver
 
 #define R "\x1B[0m"		 // reset
+
+void print_error(esp_err_t result, const char *fxname,
+                 int lineno,  char *str);
+_Bool false_and_printf(const char *fxname, int lineno, char *str);
 
 #endif

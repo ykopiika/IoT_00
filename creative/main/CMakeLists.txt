@@ -7,4 +7,5 @@ idf_component_register(
         REQUIRES dht11
         REQUIRES oled
         REQUIRES speaker
+        REQUIRES custom_error_functions
 )

@@ -6,18 +6,18 @@
 #include "dht_11.h"
 #include "oled.h"
 #include "speaker.h"
-#include "color.h"
+#include "error_functions.h"
 
 typedef struct  s_data
 {
     spi_device_handle_t spi;
-    uint8_t             tem;
-    uint8_t             hum;
+    uint8_t             tem;    // last temperature value
+    uint8_t             hum;    // last humidity value
 
-    _Bool               is_page_two;
-    _Bool               is_updt_tem;
-    _Bool               is_updt_hum;
-    _Bool               is_down;
+    _Bool               is_page_two;    // current displayed page
+    _Bool               is_updt_tem;    // do i need to update the temperature?
+    _Bool               is_updt_hum;    // do i need to update the humidity?
+    _Bool               is_down;        // is board down?
 
     t_button            btn1;
     t_button            btn2;

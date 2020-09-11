@@ -1,12 +1,5 @@
 #include "dht_11.h"
 
-//static void print_error(char *str)
-//{
-//    if (str)
-//        printf("Error: %s\n", str);
-//    exit(1);
-//}
-
 static int count_status(int time, _Bool status)
 {
     int count = 0;
@@ -31,15 +24,11 @@ static _Bool is_correct_call_to_dht11(void)
     ets_delay_us(30);
     ESP_ERROR_CHECK(gpio_set_direction(DH11_DATA_PIN, GPIO_MODE_INPUT));
     if (count_status(80, 0) == -1)
-    {
-        printf("STAGE_1 - Sensor response failed\n");
-        return false;
-    }
+        return false_and_printf(__func__ , __LINE__,
+                                "STAGE_1 failed\n");
     if (count_status(80, 1) == -1)
-    {
-        printf("STAGE_2 - Sensor response failed\n");
-        return false;
-    }
+        return false_and_printf(__func__ , __LINE__,
+                                "STAGE_2 failed\n");
     return true;
 }
 
@@ -62,22 +51,17 @@ static _Bool is_correct_value(uint8_t *arr)
     int result = 0;
     for (int i = 1, j = 0; i < 41; i++) {
         if (count_status(50, 0) == -1)
-        {
-            printf("STAGE_3 - Sensor response failed\n");
-            return false;
-        }
+            return false_and_printf(__func__ , __LINE__,
+                                    "STAGE_3 failed\n");
         if ((result = count_status(70, 1)) == -1)
-        {
-            printf("STAGE_4 - Sensor response failed\n");
-            return false;
-        }
+            return false_and_printf(__func__ , __LINE__,
+                                    "STAGE_1 failed\n");
+//            printf("STAGE_4 - Sensor response failed\n");
         set_bit(result, arr, &j, i);
     }
     if (arr[0] + arr[1] + arr[2] + arr[3] != arr[4])
-    {
-        printf("Invalid checksum\n");
-        return false;
-    }
+        return false_and_printf(__func__ , __LINE__,
+                                "Invalid checksum\n");
     return true;
 }
 

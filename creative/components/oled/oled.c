@@ -49,9 +49,8 @@ void display_pixels(t_oled *oled)
     ESP_ERROR_CHECK(i2c_master_write_byte(cmd, 0x40, true)); // data stream
     ESP_ERROR_CHECK(i2c_master_write(cmd, oled->pixels, sizeof(oled->pixels), true));
     ESP_ERROR_CHECK(i2c_master_stop(cmd));
-    if (i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS) != ESP_OK)
-        printf("\x1b[35m\t\t\t=== i2c_begin not ESP_OK ===\n\x1B[0m");
-//    i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS);TODO: change ESP_ERROR
+    print_error(i2c_master_cmd_begin(oled->port, cmd, 10 / portTICK_PERIOD_MS),
+                __func__, __LINE__, "master_cmd_begin failed");
     i2c_cmd_link_delete(cmd);
 }
 
@@ -80,8 +79,9 @@ void str_to_oled(t_oled *oled, char *str)
     if (!oled || !str)
         ESP_ERROR_CHECK(ESP_ERR_INVALID_ARG);
     int len = strlen(str);
-    int x = 0;
-    int y = 0;
+    int calc = LCDWIDTH - (len * 6);
+    int x = (calc > 0) ? (calc / 2) : 0;
+    int y = 3;
     for (int i = 0; (i < len) && (i < 168); ++i) {
         int pixels_index = (y * LCDWIDTH) + x;
         int char_index = (str[i] - 32) * 6;
@@ -93,6 +93,7 @@ void str_to_oled(t_oled *oled, char *str)
             y++;
         }
     }
+    display_pixels(oled);
 }
 
 static void init_i2c(void)
@@ -127,4 +128,5 @@ void init_oled(t_oled *oled)
     init_i2c();
     set_commands(oled);
     clear_oled(oled);
+    display_pixels(oled);
 }
