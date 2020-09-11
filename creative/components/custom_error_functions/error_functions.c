@@ -1,8 +1,8 @@
 #include "error_functions.h"
 
-void print_error(esp_err_t result, const char *fxname, int lineno, char *str)
+void print_error(esp_err_t res, const char *fxname, int lineno, char *str)
 {
-    if (result != ESP_OK)
+    if (res != ESP_OK)
     {
         printf("\t\t\t"T_TRK"Function %s: line %d:\n"R, fxname, lineno);
         printf("\t\t\t"T_YEL"%s\n"R, str);

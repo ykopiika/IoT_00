@@ -26,8 +26,7 @@
 
 #define R "\x1B[0m"		 // reset
 
-void print_error(esp_err_t result, const char *fxname,
-                 int lineno,  char *str);
+void print_error(esp_err_t res, const char *fxname, int lineno, char *str);
 _Bool false_and_printf(const char *fxname, int lineno, char *str);
 
 #endif

@@ -6,8 +6,6 @@
 #include "driver/gpio.h"
 #include <driver/dac.h>
 
-//#define LED_1       GPIO_NUM_27
-//#define LED_2       GPIO_NUM_26
 #define BUTTON_1    GPIO_NUM_39
 #define BUTTON_2    GPIO_NUM_18
 

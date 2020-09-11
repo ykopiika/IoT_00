@@ -4,7 +4,7 @@
 #include "accelerometer.h"
 #include "buttons.h"
 #include "dht_11.h"
-#include "oled.h"
+#include "oled_init.h"
 #include "speaker.h"
 #include "error_functions.h"
 

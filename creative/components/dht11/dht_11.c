@@ -56,7 +56,6 @@ static _Bool is_correct_value(uint8_t *arr)
         if ((result = count_status(70, 1)) == -1)
             return false_and_printf(__func__ , __LINE__,
                                     "STAGE_1 failed\n");
-//            printf("STAGE_4 - Sensor response failed\n");
         set_bit(result, arr, &j, i);
     }
     if (arr[0] + arr[1] + arr[2] + arr[3] != arr[4])
@@ -91,7 +90,3 @@ void get_value_dht11(uint8_t *temperature, uint8_t *humidity)
     *humidity = arr[0];
     *temperature = arr[2];
 }
-
-//TODO: 6 function
-//TODO: color printf_error
-//TODO coments
